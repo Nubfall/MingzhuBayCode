@@ -8,4 +8,4 @@
 3.运行Busget 1.0.py(代码来源：公众号 Hello Trans)，获取公交线路和公交站。详情请见https://mp.weixin.qq.com/s/uHctt3bdVj0wcchdwKN5UA  
 
 依赖安装：  
-pip install requests transbigdata BeautifulSoup4 Path   
+pip install requests transbigdata BeautifulSoup4 Path xlsxwriter  
