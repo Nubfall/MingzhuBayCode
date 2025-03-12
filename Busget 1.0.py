@@ -1,5 +1,4 @@
 # encoding:utf-8
-# 来源：微信公众号：Hello Trans
 import requests
 import json
 import transbigdata as tbd
