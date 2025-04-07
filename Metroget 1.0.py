@@ -1,6 +1,4 @@
 # encoding:utf-8
-# 来源：微信公众号：Hello Trans
-
 import warnings
 # 过滤 transbigdata 中因添加 geometry 列而触发的 FutureWarning
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -18,20 +16,17 @@ radius = int(input('请输入半径，例如1000米，则输入1000即可：'))
 location = input("请输出经纬度坐标：")
 page_max = int(input("请输入最大页面："))
 
-# 分割经纬度
+# 分割经纬度，并重组为“经度,纬度”格式
 latitude, longitude = location.split(',')
-
-# 重组经纬度为“经度,纬度”格式
 new_location = f"{longitude.strip()}, {latitude.strip()}"
-page = 0  # 用于翻页
 
-# 初始化结果列表
-all_results = []
+page = 0  # 用于翻页
+all_results = []  # 初始化结果列表
 
 # 循环获取所有页面数据
 while page < page_max:
     params = {
-        "query": "公交车站",
+        "query": "地铁站",
         "location": new_location,
         "radius": radius,
         "output": "json",
@@ -44,17 +39,16 @@ while page < page_max:
     dic = json.loads(response_json)  # 将 JSON 字符串转为字典格式
 
     data = dic['results']
-    all_results = all_results + data
+    all_results += data  # 将当前页数据加入结果列表
 
-    # 更新页码
-    page += 1
+    page += 1  # 更新页码
     print(f"第{page}页...")
 
-# 保存数据到文件
+# 保存原始数据到文件
 with open('bus_poi.json', 'w', encoding='utf-8') as file:
     json.dump({"results": all_results}, file, ensure_ascii=False, indent=4)
 
-# 创建GeoJSON的FeatureCollection结构
+# 创建 GeoJSON 的 FeatureCollection 结构
 geojson = {
     "type": "FeatureCollection",
     "features": []
@@ -82,7 +76,7 @@ for result in all_results:
     }
     geojson["features"].append(feature)
 
-# 保存GeoJSON到文件
+# 保存 GeoJSON 数据到文件
 with open('bus_poi.geojson', 'w', encoding='utf-8') as file:
     json.dump(geojson, file, ensure_ascii=False, indent=4)
 
@@ -102,16 +96,20 @@ print(f'目标点范围内共有 {len(bus_names)} 个公交站点和 {len(unique
 print(bus_names)
 print(unique_lines_list)
 
-# 读取线路信息
+# 读取公交线路信息（包含线路和站点）
 city = input('请确认项目所在的城市：')
 lines, stops = tbd.getbusdata(city, unique_lines_list)
 
-# 为 GeoDataFrame 显式设置活动 geometry 列，并赋予 CRS
+# ------------------------------
+# 设置活动几何列与 CRS
+# ------------------------------
+# 显式指定 GeoDataFrame 的活动几何列，避免未来版本自动设定变化的风险
 lines = lines.set_geometry('geometry')
-lines.set_crs("EPSG:4326", inplace=True)
 stops = stops.set_geometry('geometry')
+# 明确赋予 CRS 为 EPSG:4326，确保写入的 GeoJSON 包含投影信息
+lines.set_crs("EPSG:4326", inplace=True)
 stops.set_crs("EPSG:4326", inplace=True)
 
-# 保存为GeoJSON文件
+# 保存为 GeoJSON 文件
 lines.to_file("lines.geojson", driver="GeoJSON")
 stops.to_file("stops.geojson", driver="GeoJSON")
