@@ -1,6 +1,7 @@
 # MingzhuBayCode
 一些做项目时用到的代码，基于研究区广州市南沙区明珠湾  
 部分代码来自互联网（原谅我已经找不到出处了...  
+代码绝代部分由AI生成，请自行调试  
 
 使用方法：  
 1.运行Guangzhou8464.py,获取广州市所有公共交通路线（包括地铁）。  
@@ -19,6 +20,9 @@
 2025.04.09新增：  
 1.新增 NSGA-II 算法GeneticAlgorithm.py(一种改进的遗传算法)，相较于传统的遗传算法具有（1）快速非支配排序（2）多样性保护等优点。详情请见：https://blog.csdn.net/weixin_45526117/article/details/128507020  
 2.代码内的部分实验数据可联系nubfall@outlook.com获取。  
+3.实现功能：  
+（1）调用ThreadPoolExecutor实现并发操作；  
+（2）调用arcpy库，实现shp读取、网络分析获取旅行时间、计算覆盖率等，并定义优化目标；  
 
 依赖安装：  
 pip install requests transbigdata BeautifulSoup4 Path xlsxwriter shapely scikit-base pyproj pyogrio pykalman geopandas osmnx  
