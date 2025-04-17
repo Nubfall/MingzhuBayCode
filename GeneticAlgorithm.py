@@ -7,13 +7,20 @@ import numpy as np
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-# 设置工作空间
-arcpy.env.workspace = r"E:\Pycharm\GA"
+# 设置初始文件夹路径并创建文件地理数据库
+workspace_folder = r"E:\Pycharm\GA"
+arcpy.env.workspace = workspace_folder
+gdb_name = "GA_Workspace.gdb"
+gdb_path = arcpy.CreateFileGDB_management(workspace_folder, gdb_name).getOutput(0)
+
+# 设置工作空间为新创建的文件地理数据库
+arcpy.env.workspace = gdb_path
 arcpy.env.overwriteOutput = True
 
-############################################
+# 网络数据集路径（保持不变，确保路径有效）
+network_dataset_path = r"E:\Pycharm\GA\data\RoadNetwork.gdb\RoadNetwork\RoadNetwork_ND"
+
 # 辅助函数：数据加载与网络属性检查
-############################################
 def load_data(file_path, fields):
     if not arcpy.Exists(file_path):
         raise FileNotFoundError(f"文件不存在: {file_path}")
@@ -25,10 +32,7 @@ def list_network_attributes(network_dataset_path):
     print("可用网络属性:", attributes)
     return attributes
 
-############################################
 # 数据加载
-############################################
-# 公交站点（要求包含 FID 字段）
 bus_stop_path = r"E:\Pycharm\GA\data\MingzhuBay_Bustop.shp"
 fields = [f.name for f in arcpy.ListFields(bus_stop_path)]
 if "FID" not in fields:
@@ -419,7 +423,7 @@ def nsga2(population, num_generations, tournament_size, available_stops, travel_
 ############################################
 # 主程序入口
 ############################################
-stop_count = 15  # 固定站点数
+stop_count = 20  # 固定站点数
 population_size = 70
 num_generations = 500
 tournament_size = 4
