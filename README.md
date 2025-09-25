@@ -16,13 +16,3 @@
 2.代码来源：Tang J, Xu L, Yu H, et al. A dataset of multi-level street-block divisions of 985 cities worldwide[J]. Scientific Data, 2025, 12(1): 456.  
 3.对代码进行部分改动以适应项目需要。  
 4.需要图层：（1）Open Street Map路网road.shp，需要有fclass字段；（2）admin.shp文件，需要有Name_0(countryname)、Name(citiname)字段.  
-
-2025.04.09新增：  
-1.新增 NSGA-II 算法GeneticAlgorithm.py(一种改进的遗传算法)，相较于传统的遗传算法具有（1）快速非支配排序（2）多样性保护等优点。详情请见：https://blog.csdn.net/weixin_45526117/article/details/128507020  
-2.代码内的部分实验数据可联系nubfall@outlook.com获取。  
-3.实现功能：  
-（1）调用ThreadPoolExecutor实现并发操作；  
-（2）调用arcpy库，实现shp读取、网络分析获取旅行时间、计算覆盖率等，并定义优化目标；  
-
-依赖安装：  
-pip install requests transbigdata BeautifulSoup4 Path xlsxwriter shapely scikit-base pyproj pyogrio pykalman geopandas osmnx  
